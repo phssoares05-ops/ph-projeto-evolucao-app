@@ -4,387 +4,177 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#101510">
+<meta name="theme-color" content="#101010">
 <title>PH | Projeto Evolução</title>
 <style>
-:root {
-  --bg:#101510;
-  --card:#1b241d;
-  --green:#a5e65b;
-  --white:#f5f7f2;
-  --muted:#9ca99b;
-  --border:#303c30;
-}
 *{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--white);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-header{padding:26px 20px 16px}
-.brand{color:var(--green);font-size:13px;font-weight:800;letter-spacing:2px}
-h1{font-size:27px;margin:8px 0}
-.subtitle{color:var(--muted);font-size:13px}
-main{padding:0 16px 105px;max-width:650px;margin:auto}
-h2{font-size:19px;margin:23px 0 13px}
-h3{font-size:15px;margin:0 0 12px}
-.card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:17px;padding:17px;margin-bottom:13px;
-}
-.hero{background:linear-gradient(135deg,#263b20,#172318)}
-.hero strong{font-size:34px;color:var(--green)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.metric{background:var(--card);padding:15px;border-radius:15px;border:1px solid var(--border)}
-.metric strong{display:block;font-size:23px;margin-top:8px}
-.muted{color:var(--muted);font-size:12px}
-input,select,textarea{
-  width:100%;padding:13px;margin:7px 0 12px;
-  border-radius:10px;border:1px solid var(--border);
-  background:#101810;color:white;font-size:15px;
-}
-button{
-  background:var(--green);color:#15200e;border:0;
-  padding:13px 17px;border-radius:11px;font-weight:800;
-  font-size:14px;cursor:pointer;
-}
-button.secondary{background:#303d31;color:white}
-button.danger{background:#542e2e;color:white}
-label{font-size:12px;color:var(--muted)}
-.progress{height:9px;background:#303b30;border-radius:20px;overflow:hidden;margin:12px 0}
-.progress div{height:100%;background:var(--green);width:0%;border-radius:20px}
-nav{
-  position:fixed;bottom:0;left:0;right:0;
-  background:#172018;border-top:1px solid var(--border);
-  display:flex;justify-content:space-around;padding:12px 3px;
-  padding-bottom:max(12px,env(safe-area-inset-bottom));
-  z-index:5;
-}
-nav button{background:transparent;color:var(--muted);padding:8px 4px;font-size:11px}
-nav button.active{color:var(--green)}
-section{display:none}
-section.active{display:block}
-.record{padding:12px 0;border-bottom:1px solid var(--border)}
-.record:last-child{border:0}
-.record strong{font-size:14px}
-.record small{display:block;color:var(--muted);margin-top:5px}
-canvas{width:100%;height:180px}
-.tag{color:var(--green);font-size:11px;font-weight:bold}
-.empty{color:var(--muted);font-size:13px;padding:12px 0}
+body{margin:0;background:#101010;color:#fff;font-family:Arial,sans-serif;padding:20px}
+header{text-align:center;padding:22px 0}
+header h1{color:#b5ff35;font-size:27px;margin:0}
+header p{color:#aaa}
+h2{font-size:19px;margin-top:25px}
+.card{background:#1d1d1d;border:1px solid #333;border-radius:15px;padding:17px;margin:13px 0}
+input,select,button{width:100%;padding:13px;margin:7px 0;border-radius:9px;border:1px solid #444;background:#292929;color:white;font-size:16px}
+button{background:#b5ff35;color:#111;font-weight:bold;border:0;cursor:pointer}
+.small{color:#aaa;font-size:13px}
+.metric{font-size:28px;font-weight:bold;color:#b5ff35}
+.entry{padding:10px 0;border-bottom:1px solid #444}
+.entry:last-child{border:0}
+.delete{background:#6b2525;color:white}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="brand">PH | PROJETO EVOLUÇÃO</div>
-  <h1>Minha evolução. Minha história.</h1>
-  <div class="subtitle" id="today"></div>
+<h1>PH | PROJETO EVOLUÇÃO</h1>
+<p>Disciplina hoje. Resultado amanhã.</p>
 </header>
 
-<main>
+<div class="card">
+<h2>Minha evolução</h2>
+<p>Peso atual</p>
+<div class="metric" id="pesoAtual">-- kg</div>
+<p class="small">Meta: 95 kg</p>
+<div id="progresso" class="small">Registre seu peso para acompanhar.</div>
+</div>
 
-<section id="home" class="active">
-  <div class="card hero">
-    <div class="tag">MINHA META</div>
-    <h2>Construindo um físico forte.</h2>
-    <strong id="homeWeight">100 kg</strong>
-    <p class="muted">Meta: 95 kg · Evolução diária</p>
-    <div class="progress"><div id="mainProgress"></div></div>
-    <span class="muted" id="progressText"></span>
-  </div>
+<div class="card">
+<h2>⚖️ Registrar peso</h2>
+<input id="peso" type="number" step="0.1" placeholder="Peso em kg">
+<button onclick="salvarPeso()">Salvar pesagem</button>
+</div>
 
-  <h2>Resumo de hoje</h2>
-  <div class="grid">
-    <div class="metric">
-      <span class="muted">Peso atual</span>
-      <strong id="metricWeight">100 kg</strong>
-    </div>
-    <div class="metric">
-      <span class="muted">Água consumida</span>
-      <strong id="metricWater">0 ml</strong>
-    </div>
-    <div class="metric">
-      <span class="muted">Calorias</span>
-      <strong id="metricCalories">0</strong>
-    </div>
-    <div class="metric">
-      <span class="muted">Treinos</span>
-      <strong id="metricWorkouts">0</strong>
-    </div>
-  </div>
+<div class="card">
+<h2>🏋️ Treino de musculação</h2>
+<input id="treino" placeholder="Ex.: Peito e tríceps">
+<input id="duracao" type="number" placeholder="Duração em minutos">
+<input id="exercicios" placeholder="Exercícios realizados">
+<button onclick="salvarTreino()">Registrar treino</button>
+</div>
 
-  <h2>Acompanhamento diário</h2>
-  <div class="card">
-    <h3>Hidratação</h3>
-    <div class="progress"><div id="waterProgress"></div></div>
-    <p class="muted" id="waterText">0 de 3500 ml</p>
-    <button onclick="addWater(250)">+ 250 ml</button>
-    <button class="secondary" onclick="addWater(500)">+ 500 ml</button>
-  </div>
-</section>
+<div class="card">
+<h2>🏃 Corrida e caminhada</h2>
+<input id="distancia" type="number" step="0.1" placeholder="Distância em km">
+<input id="tempo" type="number" placeholder="Tempo em minutos">
+<select id="tipoCorrida">
+<option>Corrida</option>
+<option>Caminhada</option>
+<option>Corrida e caminhada</option>
+</select>
+<button onclick="salvarCorrida()">Registrar atividade</button>
+</div>
 
-<section id="weight">
-  <h2>⚖️ Evolução do peso</h2>
-  <div class="card">
-    <label>Registrar peso (kg)</label>
-    <input id="weightInput" type="number" step="0.1" placeholder="Ex.: 100.5">
-    <label>Data da pesagem</label>
-    <input id="weightDate" type="date">
-    <button onclick="saveWeight()">Salvar pesagem</button>
-  </div>
-  <div class="card">
-    <h3>Histórico de peso</h3>
-    <canvas id="weightChart"></canvas>
-    <div id="weightHistory"></div>
-  </div>
-</section>
+<div class="card">
+<h2>🥗 Alimentação</h2>
+<input id="alimento" placeholder="O que você comeu?">
+<input id="calorias" type="number" placeholder="Calorias aproximadas">
+<button onclick="salvarAlimento()">Registrar alimentação</button>
+<p>Calorias registradas hoje: <strong id="totalCalorias">0 kcal</strong></p>
+</div>
 
-<section id="training">
-  <h2>🏋️ Treinos e corrida</h2>
-  <div class="card">
-    <label>Tipo de atividade</label>
-    <select id="activityType">
-      <option>Musculação</option>
-      <option>Corrida</option>
-      <option>Caminhada</option>
-      <option>Bicicleta</option>
-      <option>Cardio</option>
-    </select>
-    <label>Treino / descrição</label>
-    <input id="activityName" placeholder="Ex.: Treino de peito">
-    <label>Duração (minutos)</label>
-    <input id="activityDuration" type="number" placeholder="60">
-    <label>Distância (km), se aplicável</label>
-    <input id="activityDistance" type="number" step="0.1" placeholder="5">
-    <label>Data</label>
-    <input id="activityDate" type="date">
-    <button onclick="saveActivity()">Registrar atividade</button>
-  </div>
-  <div class="card">
-    <h3>Histórico de atividades</h3>
-    <div id="activityHistory"></div>
-  </div>
-</section>
+<div class="card">
+<h2>💧 Hidratação</h2>
+<div class="metric" id="aguaAtual">0 ml</div>
+<p class="small">Meta diária: 3.000 ml</p>
+<button onclick="adicionarAgua(250)">+ 250 ml</button>
+<button onclick="adicionarAgua(500)">+ 500 ml</button>
+</div>
 
-<section id="nutrition">
-  <h2>🥗 Alimentação</h2>
-  <div class="card">
-    <label>Refeição</label>
-    <select id="mealType">
-      <option>Café da manhã</option>
-      <option>Almoço</option>
-      <option>Lanche</option>
-      <option>Jantar</option>
-      <option>Ceia</option>
-    </select>
-    <label>Alimentos</label>
-    <input id="mealName" placeholder="Ex.: Frango, arroz e salada">
-    <label>Calorias estimadas (kcal)</label>
-    <input id="mealCalories" type="number" placeholder="500">
-    <label>Data</label>
-    <input id="mealDate" type="date">
-    <button onclick="saveMeal()">Registrar refeição</button>
-  </div>
-  <div class="card">
-    <h3>Calorias do dia</h3>
-    <strong id="calorieTotal" style="font-size:28px;color:var(--green)">0 kcal</strong>
-    <p class="muted">Soma das refeições registradas hoje.</p>
-    <div id="mealHistory"></div>
-  </div>
-</section>
+<div class="card">
+<h2>📊 Histórico de atividades</h2>
+<div id="historico">Suas atividades aparecerão aqui.</div>
+<button class="delete" onclick="limparHistorico()">Apagar histórico</button>
+</div>
 
-<section id="measurements">
-  <h2>📏 Medidas corporais</h2>
-  <div class="card">
-    <label>Data</label>
-    <input id="measureDate" type="date">
-    <label>Peito (cm)</label>
-    <input id="chest" type="number" step="0.1">
-    <label>Cintura (cm)</label>
-    <input id="waist" type="number" step="0.1">
-    <label>Abdômen (cm)</label>
-    <input id="abdomen" type="number" step="0.1">
-    <label>Braço (cm)</label>
-    <input id="arm" type="number" step="0.1">
-    <label>Coxa (cm)</label>
-    <input id="thigh" type="number" step="0.1">
-    <button onclick="saveMeasurements()">Salvar medidas</button>
-  </div>
-  <div class="card">
-    <h3>Histórico de medidas</h3>
-    <div id="measureHistory"></div>
-  </div>
-</section>
-
-<section id="settings">
-  <h2>⚙️ Configurações</h2>
-  <div class="card">
-    <label>Meta de peso (kg)</label>
-    <input id="goalInput" type="number" step="0.1" value="95">
-    <label>Meta diária de água (ml)</label>
-    <input id="waterGoalInput" type="number" value="3500">
-    <button onclick="saveSettings()">Salvar configurações</button>
-  </div>
-  <div class="card">
-    <h3>Seus dados</h3>
-    <p class="muted">Os registros ficam salvos neste navegador.</p>
-    <button class="secondary" onclick="exportData()">Exportar meus dados</button>
-    <p></p>
-    <button class="danger" onclick="clearData()">Apagar todos os dados</button>
-  </div>
-  <p class="muted">PH | Projeto Evolução · Versão 1.0</p>
-</section>
-
-</main>
-
-<nav>
-  <button class="active" onclick="showTab('home',this)">⌂<br>Início</button>
-  <button onclick="showTab('weight',this)">⚖<br>Peso</button>
-  <button onclick="showTab('training',this)">🏋<br>Treino</button>
-  <button onclick="showTab('nutrition',this)">🥗<br>Dieta</button>
-  <button onclick="showTab('measurements',this)">📏<br>Medidas</button>
-  <button onclick="showTab('settings',this)">⚙<br>Mais</button>
-</nav>
+<p class="small" style="text-align:center;margin:30px 0">
+PH | PROJETO EVOLUÇÃO • Sua transformação continua.
+</p>
 
 <script>
-const KEY="phProjetoEvolucaoV1";
-let db=JSON.parse(localStorage.getItem(KEY)||"{}");
-db.weights ||= [];
-db.activities ||= [];
-db.meals ||= [];
-db.measurements ||= [];
-db.water ||= {};
-db.settings ||= {goal:95,waterGoal:3500};
+const chave = "ph_projeto_evolucao_v1";
+let dados = JSON.parse(localStorage.getItem(chave) || '{"pesos":[],"atividades":[],"agua":{}}');
 
-const today=()=>new Date().toLocaleDateString("en-CA");
-const el=id=>document.getElementById(id);
-const num=id=>Number(el(id).value);
-const fmt=n=>Number(n).toLocaleString("pt-BR");
-function save(){localStorage.setItem(KEY,JSON.stringify(db));render();}
-function showTab(id,btn){
- document.querySelectorAll("main section").forEach(s=>s.classList.remove("active"));
- el(id).classList.add("active");
- document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
- btn.classList.add("active");
- render();
+function salvarDados(){
+ localStorage.setItem(chave,JSON.stringify(dados));
+ atualizar();
 }
-function latestWeight(){
- return db.weights.length ? [...db.weights].sort((a,b)=>b.date.localeCompare(a.date))[0].value : 100;
+
+function hoje(){
+ return new Date().toLocaleDateString("pt-BR");
 }
-function addWater(amount){
- const d=today();
- db.water[d]=(db.water[d]||0)+amount;
- save();
+
+function salvarPeso(){
+ const valor = Number(document.getElementById("peso").value);
+ if(!valor || valor<30 || valor>300){alert("Digite um peso válido.");return;}
+ dados.pesos.push({valor,data:hoje()});
+ document.getElementById("peso").value="";
+ salvarDados();
 }
-function saveWeight(){
- const value=num("weightInput");
- if(!value||value<20||value>400)return alert("Digite um peso válido.");
- db.weights.push({value,date:el("weightDate").value||today()});
- save();el("weightInput").value="";
+
+function salvarTreino(){
+ const nome=document.getElementById("treino").value.trim();
+ const duracao=document.getElementById("duracao").value;
+ const exercicios=document.getElementById("exercicios").value.trim();
+ if(!nome){alert("Informe o treino.");return;}
+ dados.atividades.unshift({tipo:"Treino",descricao:nome+" | "+exercicios+" | "+duracao+" min",data:hoje()});
+ document.getElementById("treino").value="";
+ document.getElementById("duracao").value="";
+ document.getElementById("exercicios").value="";
+ salvarDados();
 }
-function saveActivity(){
- const name=el("activityName").value.trim();
- if(!name)return alert("Informe o nome da atividade.");
- db.activities.push({
- type:el("activityType").value,name,
- duration:num("activityDuration"),
- distance:num("activityDistance"),
- date:el("activityDate").value||today()
- });
- save();el("activityName").value="";
- el("activityDuration").value="";
- el("activityDistance").value="";
+
+function salvarCorrida(){
+ const distancia=Number(document.getElementById("distancia").value);
+ const tempo=Number(document.getElementById("tempo").value);
+ const tipo=document.getElementById("tipoCorrida").value;
+ if(!distancia || !tempo){alert("Informe distância e tempo.");return;}
+ dados.atividades.unshift({tipo:tipo,descricao:distancia+" km em "+tempo+" minutos",data:hoje()});
+ document.getElementById("distancia").value="";
+ document.getElementById("tempo").value="";
+ salvarDados();
 }
-function saveMeal(){
- const name=el("mealName").value.trim();
- const calories=num("mealCalories");
- if(!name||calories<0)return alert("Preencha a refeição e as calorias.");
- db.meals.push({type:el("mealType").value,name,calories,date:el("mealDate").value||today()});
- save();el("mealName").value="";el("mealCalories").value="";
+
+function salvarAlimento(){
+ const nome=document.getElementById("alimento").value.trim();
+ const calorias=Number(document.getElementById("calorias").value);
+ if(!nome || !calorias){alert("Informe alimento e calorias.");return;}
+ dados.atividades.unshift({tipo:"Alimentação",descricao:nome+" | "+calorias+" kcal",calorias:calorias,data:hoje()});
+ document.getElementById("alimento").value="";
+ document.getElementById("calorias").value="";
+ salvarDados();
 }
-function saveMeasurements(){
- const fields=["chest","waist","abdomen","arm","thigh"];
- const values={};
- fields.forEach(f=>values[f]=num(f)||null);
- if(!fields.some(f=>values[f]))return alert("Preencha pelo menos uma medida.");
- db.measurements.push({date:el("measureDate").value||today(),...values});
- save();
- fields.forEach(f=>el(f).value="");
+
+function adicionarAgua(quantidade){
+ const data=hoje();
+ dados.agua[data]=(dados.agua[data]||0)+quantidade;
+ salvarDados();
 }
-function saveSettings(){
- db.settings.goal=num("goalInput")||95;
- db.settings.waterGoal=num("waterGoalInput")||3500;
- save();alert("Configurações salvas!");
-}
-function list(items,format){
- return items.length ? [...items].sort((a,b)=>b.date.localeCompare(a.date)).map(format).join("") : '<div class="empty">Nenhum registro ainda.</div>';
-}
-function render(){
- const w=latestWeight(),goal=db.settings.goal;
- const water=db.water[today()]||0;
- const calories=db.meals.filter(x=>x.date===today()).reduce((s,x)=>s+x.calories,0);
- const workouts=db.activities.filter(x=>x.date===today()).length;
- el("homeWeight").textContent=w+" kg";
- el("metricWeight").textContent=w+" kg";
- el("metricWater").textContent=fmt(water)+" ml";
- el("metricCalories").textContent=fmt(calories);
- el("metricWorkouts").textContent=workouts;
- const start=141;
- const progress=Math.max(0,Math.min(100,(start-w)/(start-goal)*100));
- el("mainProgress").style.width=progress+"%";
- el("progressText").textContent=Math.max(0,start-w).toFixed(1)+" kg eliminados desde 141 kg · Meta "+goal+" kg";
- el("waterProgress").style.width=Math.min(100,water/db.settings.waterGoal*100)+"%";
- el("waterText").textContent=fmt(water)+" de "+fmt(db.settings.waterGoal)+" ml";
- el("calorieTotal").textContent=fmt(calories)+" kcal";
- el("weightHistory").innerHTML=list(db.weights,x=>`<div class="record"><strong>${x.value} kg</strong><small>${x.date}</small></div>`);
- el("activityHistory").innerHTML=list(db.activities,x=>`<div class="record"><strong>${x.type}: ${x.name}</strong><small>${x.date} · ${x.duration||0} min · ${x.distance||0} km</small></div>`);
- el("mealHistory").innerHTML=list(db.meals.filter(x=>x.date===today()),x=>`<div class="record"><strong>${x.type}: ${x.name}</strong><small>${fmt(x.calories)} kcal</small></div>`);
- el("measureHistory").innerHTML=list(db.measurements,x=>`<div class="record"><strong>${x.date}</strong><small>Peito: ${x.chest||"-"} · Cintura: ${x.waist||"-"} · Abdômen: ${x.abdomen||"-"} · Braço: ${x.arm||"-"} · Coxa: ${x.thigh||"-"} cm</small></div>`);
- el("goalInput").value=goal;
- el("waterGoalInput").value=db.settings.waterGoal;
- drawChart();
-}
-function drawChart(){
- const c=el("weightChart"),ctx=c.getContext("2d");
- const width=c.clientWidth||300;
- c.width=width*2;c.height=360;
- ctx.scale(2,2);
- const h=180,w=width;
- ctx.clearRect(0,0,w,h);
- const data=[...db.weights].sort((a,b)=>a.date.localeCompare(b.date)).slice(-12);
- if(!data.length){
- ctx.fillStyle="#9ca99b";ctx.font="13px sans-serif";
- ctx.fillText("Registre seu peso para ver o gráfico.",10,85);return;
+
+function atualizar(){
+ const ultimo=dados.pesos[dados.pesos.length-1];
+ document.getElementById("pesoAtual").textContent=ultimo?ultimo.valor.toFixed(1)+" kg":"-- kg";
+ if(ultimo){
+  const diferenca=(ultimo.valor-95).toFixed(1);
+  document.getElementById("progresso").textContent=diferenca>0?"Faltam "+diferenca+" kg para sua meta!":"Meta de 95 kg alcançada!";
  }
- const min=Math.min(...data.map(x=>x.value))-2;
- const max=Math.max(...data.map(x=>x.value))+2;
- ctx.strokeStyle="#a5e65b";ctx.lineWidth=2;ctx.beginPath();
- data.forEach((p,i)=>{
- const x=12+(w-24)*(data.length===1?0.5:i/(data.length-1));
- const y=145-(p.value-min)/(max-min||1)*115;
- if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
- ctx.fillStyle="#a5e65b";ctx.fillRect(x-3,y-3,6,6);
- });
- ctx.stroke();
- ctx.fillStyle="#9ca99b";ctx.font="11px sans-serif";
- ctx.fillText(data[0].value+" kg",5,165);
- ctx.fillText(data[data.length-1].value+" kg",w-55,165);
+ document.getElementById("aguaAtual").textContent=(dados.agua[hoje()]||0)+" ml";
+ const calorias=dados.atividades.filter(a=>a.data===hoje()).reduce((s,a)=>s+(a.calorias||0),0);
+ document.getElementById("totalCalorias").textContent=calorias+" kcal";
+ const historico=document.getElementById("historico");
+ const itens=[
+ ...dados.pesos.map(p=>({tipo:"Pesagem",descricao:p.valor+" kg",data:p.data})),
+ ...dados.atividades
+ ];
+ historico.innerHTML=itens.length?itens.map(i=>`<div class="entry"><strong>${i.tipo}</strong><br>${i.descricao}<br><span class="small">${i.data}</span></div>`).join(""):"Suas atividades aparecerão aqui.";
 }
-function exportData(){
- const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"});
- const url=URL.createObjectURL(blob);
- const a=document.createElement("a");a.href=url;a.download="ph-projeto-evolucao.json";a.click();
- URL.revokeObjectURL(url);
-}
-function clearData(){
- if(confirm("Tem certeza que deseja apagar TODOS os registros? Esta ação não pode ser desfeita.")){
- localStorage.removeItem(KEY);location.reload();
+
+function limparHistorico(){
+ if(confirm("Tem certeza que deseja apagar todos os registros deste aparelho?")){
+  dados={pesos:[],atividades:[],agua:{}};
+  salvarDados();
  }
 }
-el("today").textContent=new Date().toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-["weightDate","activityDate","mealDate","measureDate"].forEach(id=>el(id).value=today());
-render();
-window.addEventListener("resize",drawChart);
+atualizar();
 </script>
 </body>
 </html>
-
